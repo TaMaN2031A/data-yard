@@ -10,3 +10,20 @@ Components المكونات
 
 warm_up()
 متى نحتاجها؟ لما يكون المكون تقيل مثل ال LLM او ال embedding models
+
+
+Extending the Existing Components
+يتم من خلال ال inheritance التقليدي في بايثون
+هتحتاج تعمل override or extend للدالة الجامدة المسماة ب run
+class DerivedComponent(BaseComponent):
+    def __init__(self):
+        super(DerivedComponent, self).__init__()
+
+# ...
+dc = DerivedComponent()  # ok
+
+SuperComponent
+ان تقوم بعمل خط انابيب كامل ثم تجعله component واحد
+لم نفعل هذا؟ تبسيط واجهة خط أنابيب معقد + اعادة استخدام الخط في سياقات مختلفة +
+تجريد المدخلات الى عدد محدد وكذا المخرجات
+
