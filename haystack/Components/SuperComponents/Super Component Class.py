@@ -28,7 +28,7 @@ prompt_template = [
     )
 ]
 
-prompt_builder = ChatPromptBuilder(prompt_template=prompt_template,
+prompt_builder = ChatPromptBuilder(template=prompt_template,
                                    required_variables="*")
 
 pipeline = Pipeline()

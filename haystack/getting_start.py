@@ -2,7 +2,6 @@ from haystack import Pipeline, Document
 from haystack.utils import Secret
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.components.retrievers.in_memory import InMemoryBM25Retriever
-from haystack.components.generators import HuggingFaceAPIGenerator
 from haystack.components.builders.chat_prompt_builder import ChatPromptBuilder
 from haystack.dataclasses import ChatMessage
 from haystack.components.generators.chat import HuggingFaceAPIChatGenerator

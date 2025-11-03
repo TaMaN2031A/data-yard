@@ -1,0 +1,37 @@
+Pipeline
+********
+
+- أولويات هيستاك في صناعة خطوط الانابيب التي تتعامل مع ال للم هي:
+مكونات قوية + سهلة التركيب
+
+DGs not DAGs
+- Broader than continuous steam of info: simultaneous flow + standalone components
++ loops + branching + other types of connections
+
+Async Pipelines
+- If the components can run in parallel => run them in parallel
++ smart handling of I/O-bound operations that block
+
+Data Flow
+عايز البيانات تروح من مكون للتاني؟ وصلهم
+بس كده؟ لا يا حبي: لازم تبقى عارف اسم المخرج من المصدر والمدخل في المصب اللي عايز توصلهم ببعض
+ولازم تكون الانواع بتاعت هذه المتغيرات متوافقة
+الفوايد: speed and ease of debugging
+الدالة connect تقوم بالتأكد من كل هذا
+
+خطوات تصنيع خط أنابيب
+Pipeline() => .add_component(name, component) =>
+.connect("producer_component.output_name", "consumer_component.input_name")
+=> .run({"component_1": {"mandatory_inputs": value}})
+
+You can visualize pipelines
+
+Serialization:
+Recursive on each component: component.to_dict()
+then pipeline.to_dict()
+Then YAML:
+some_component:
+  param1: value
+  param2: value
+...
+
