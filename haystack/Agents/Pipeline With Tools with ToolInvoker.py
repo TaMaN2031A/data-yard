@@ -75,7 +75,8 @@ tool_agent.connect("message_collector", "generator.messages")
 
 messages = [
     ChatMessage.from_system("You're a helpful agent choosing the right tool when necessary"),
-    ChatMessage.from_user("How is the weather in Berlin?")]
+    ChatMessage.from_user("How is the weather in Berlin?")
+]
 result = tool_agent.run({"messages": messages})
 
 print(result["router"]["final_replies"][0].text)
