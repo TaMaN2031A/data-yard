@@ -26,4 +26,26 @@ SuperComponent
 ان تقوم بعمل خط انابيب كامل ثم تجعله component واحد
 لم نفعل هذا؟ تبسيط واجهة خط أنابيب معقد + اعادة استخدام الخط في سياقات مختلفة +
 تجريد المدخلات الى عدد محدد وكذا المخرجات
+كيف يعرف ال super component او ال pipeline بداخله ان المدخل يذهب الى الكومبوننت العلاني
+ببساطة من خلال انه بيعمل داج ويشوف اللي المدخل بتاعه مش واقف على حاجه يشتغل عليه على طول
+واختيارا ممكن تكتب حاجه زي
+input_mapping = {
+    "query": ["retriever.query", "prompt.query"
+}
+output_mapping = {
+    "llm.replies": "replies"
+}
+# If you don’t provide mappings, SuperComponent will try to auto-detect them.
+So, if multiple components have outputs with the same name, we recommend using output_mapping to avoid conflicts.
 
+Type Checking and Static Code Analysis
+وانت بتعمل @super_component
+فيه دوال كتير بتضاف dynamically فا pycharm بيديك عليها warning
+ومن ثم ثد تستعمله عشان صاحبك البايتشارم يهدا ويشيل تحذيراته
+وطريقة كتابته كده
+from typing import TYPE_CHECKING
+if TYPE_CHECKING: # True when static, false when the program runs
+    def run(self, *, documents: List[Document]) -> dict[str, list[Document]]:
+        ...
+    def warm_up(self) -> None:  # noqa: D102
+        ...
