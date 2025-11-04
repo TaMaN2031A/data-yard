@@ -64,11 +64,11 @@ hybrid_rag_retrieval.add_component("llm", HuggingFaceAPIChatGenerator(api_type=H
                                              "provider": "together"},
                                   token=Secret.from_env_var("HF_TOKEN")))
 
-hybrid_rag_retrieval.connect("text_embedder", "embedding_retriever")
-hybrid_rag_retrieval.connect("bm25_retriever", "document_joiner")
-hybrid_rag_retrieval.connect("embedding_retriever", "document_joiner")
-hybrid_rag_retrieval.connect("document_joiner", "prompt_builder.documents")
-hybrid_rag_retrieval.connect("prompt_builder", "llm")
+hybrid_rag_retrieval.connect("text_embedder.embedding", "embedding_retriever.query_embedding")
+hybrid_rag_retrieval.connect("bm25_retriever.documents", "document_joiner.documents")
+hybrid_rag_retrieval.connect("embedding_retriever.documents", "document_joiner.documents")
+hybrid_rag_retrieval.connect("document_joiner.documents", "prompt_builder.documents")
+hybrid_rag_retrieval.connect("prompt_builder.prompt", "llm.messages")
 
 question = "Which pyramid is neither the smallest nor the biggest?"
 data = {
