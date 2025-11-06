@@ -4,9 +4,17 @@ from haystack.components.generators.chat import HuggingFaceAPIChatGenerator
 from haystack.components.builders.chat_prompt_builder import ChatPromptBuilder
 from haystack.dataclasses import ChatMessage
 from haystack.utils.hf import HFGenerationAPIType
+from haystack.dataclasses.breakpoints import Breakpoint
+from haystack.core.errors import BreakpointException
 
 # Documents
 documents = [Document(content="Joe lives in Berlin"), Document(content="Joe is a software engineer")]
+
+break_point = Breakpoint(
+    component_name="llm",
+    visit_count=0,
+    snapshot_file_path=r"C:\Users\20106\PycharmProjects\Data-Science\haystack\Pipelines\Debugging Pipelines"
+)
 
 # Define prompt template
 prompt_template = [
@@ -31,8 +39,12 @@ p.connect("prompt_builder", "llm.messages")
 question = "Where does Joe live?"
 
 # Execute pipeline
-result = p.run({"prompt_builder": {"documents": documents, "query": question}},
+try:
+    result = p.run({"prompt_builder": {"documents": documents, "query": question}},
                include_outputs_from="prompt_builder")
-
-# Print result
-print(result)
+    # Print result
+    print(result)
+except BreakpointException as e:
+    print(f"Breakpoint triggered at component: {e.component}")
+    print(f"Component inputs: {e.inputs}")
+    print(f"Pipeline results so far: {e.results}")
