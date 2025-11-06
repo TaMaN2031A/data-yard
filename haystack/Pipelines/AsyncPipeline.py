@@ -55,8 +55,8 @@ prompt_template = [
 
 hybrid_rag_retrieval = AsyncPipeline()
 hybrid_rag_retrieval.add_component("text_embedder", SentenceTransformersTextEmbedder())
-hybrid_rag_retrieval.add_component("embedding_retriever", InMemoryEmbeddingRetriever(document_store=document_store))
-hybrid_rag_retrieval.add_component("bm25_retriever", InMemoryBM25Retriever(document_store=document_store))
+hybrid_rag_retrieval.add_component("embedding_retriever", InMemoryEmbeddingRetriever(document_store=document_store, top_k=3))
+hybrid_rag_retrieval.add_component("bm25_retriever", InMemoryBM25Retriever(document_store=document_store, top_k=3))
 hybrid_rag_retrieval.add_component("document_joiner", DocumentJoiner())
 hybrid_rag_retrieval.add_component("prompt_builder", ChatPromptBuilder(template=prompt_template, required_variables="*"))
 hybrid_rag_retrieval.add_component("llm", HuggingFaceAPIChatGenerator(api_type=HFGenerationAPIType.SERVERLESS_INFERENCE_API,
