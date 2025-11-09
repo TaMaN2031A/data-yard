@@ -1,0 +1,4 @@
+القصة كلها في تحويل ال component or pipeline الى dict
+
+لو عايز تعمل save in other format other than yaml
+بتعمل Marshaller وتحط جواه الشكل اللي انت عايزه
