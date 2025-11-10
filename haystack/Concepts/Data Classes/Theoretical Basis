@@ -1,0 +1,6 @@
+الغرض من فصول البيانات هو تسهيل التواصل بين المكونات بعضها البعض
+حتى تسير البيانات بسهولة على haystack
+فصول البيانات هي:
+ByteStream, Answer (ExtractedAnswer and GeneratedAnswer),
+ChatMessage, Document and StreamingChunk.
+
