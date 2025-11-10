@@ -1,0 +1,36 @@
+Git Feature Workflow مع Rebase – Cheat Sheet
+1️⃣ تحديث fork/main من الشركة
+git checkout main
+git fetch upstream
+git rebase upstream/main
+# حل أي conflicts:
+git add <file>
+git rebase --continue
+
+2️⃣ إنشاء فرع جديد للـ feature
+git checkout main
+git checkout -b feature-xyz
+
+
+تأكد دايمًا إن الفرع الجديد مبني على main المحدث.
+
+3️⃣ العمل على الـ feature
+# بعد تعديل الملفات
+git add .
+git commit -m "شرح التغيير هنا"
+
+4️⃣ إذا حصل تحديث في main أثناء العمل على feature
+git fetch upstream
+git rebase upstream/main
+# حل أي conflicts:
+git add <file>
+git rebase --continue
+
+# بعد الانتهاء، push للـ fork
+git push -f origin feature-xyz
+
+5️⃣ عمل Pull Request
+
+افتح GitHub، اعمل PR من feature-xyz في fork لـ main في الشركة.
+
+كل الكوميتات القديمة هتختفي، والـ PR هيحتوي بس على التعديلات الجديدة.
