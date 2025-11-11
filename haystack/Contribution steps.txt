@@ -34,3 +34,15 @@ git push -f origin feature-xyz
 افتح GitHub، اعمل PR من feature-xyz في fork لـ main في الشركة.
 
 كل الكوميتات القديمة هتختفي، والـ PR هيحتوي بس على التعديلات الجديدة.
+
+
+
+لو عايز تغير اسم كوميت
+# اتأكد إنك على الفرع اللي فيه الـ commit
+git checkout feature-xyz
+
+# غير رسالة آخر commit
+git commit --amend -m "الرسالة الجديدة للـ commit"
+
+# بعد كده اعمل force push للفرع في fork
+git push -f origin feature-xyz
