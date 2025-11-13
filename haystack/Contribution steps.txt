@@ -1,6 +1,8 @@
 Git Feature Workflow مع Rebase – Cheat Sheet
 1️⃣ تحديث fork/main من الشركة
 git checkout main
+git remote add upstream <url_of_original_repo>
+https://github.com/deepset-ai/haystack-cookbook.git
 git fetch upstream
 git rebase upstream/main
 # حل أي conflicts:
@@ -42,7 +44,8 @@ git push -f origin feature-xyz
 git checkout feature-xyz
 
 # غير رسالة آخر commit
-git commit --amend -m "الرسالة الجديدة للـ commit"
+git commit --amend -m "Update AstraDocumentStore initialization to use the correct parameter names."
 
 # بعد كده اعمل force push للفرع في fork
 git push -f origin feature-xyz
+
