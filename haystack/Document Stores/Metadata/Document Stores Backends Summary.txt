@@ -22,3 +22,14 @@ Components:
         Retrieves the data in the index
         Filters | Sorts
 AI Search is Azure OpenAI + Vector embeddings
+
+* ChromaDB
+Open source DB
+For embeddings + vector search + easily deals with LLMs
+Very easy interface:
+    create interface => add data then query
+MetaData support
+Backed by DuckDB + Parquet
+يعني Chroma ممتاز للـ development، prototyping، والـ local RAG.
+لكن لو مشروعك Enterprise أو محتاج scalability → روح لـ Vector DB cloud.
+
