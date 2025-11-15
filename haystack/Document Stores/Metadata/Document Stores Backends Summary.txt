@@ -33,16 +33,16 @@ Backed by DuckDB + Parquet
 يعني Chroma ممتاز للـ development، prototyping، والـ local RAG.
 لكن لو مشروعك Enterprise أو محتاج scalability → روح لـ Vector DB cloud.
 
-CouchDB
+Couchbase
 NoSQL
-Document store
-JSON documents (Not table)
+Distributed Document Store
+JSON documents + KeyVal store (Not table)
 Document oriented
 Schema free
-RESTful HTTP API
+Multiple API
 multi version concurrency control (no locks, like github)
-replication
+replication + auto-sharding
 fault tolerant
-querying => MapReduce and Mango (SQLite)
-Great offline support
-
+querying => N1QL (SQLike) + full-text search + vector search
+Designed for performance, caching built-in
+Operational database + Analytics engine + Vector DB في system واحد
