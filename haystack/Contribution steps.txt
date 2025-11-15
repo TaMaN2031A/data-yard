@@ -47,5 +47,5 @@ git checkout feature-xyz
 git commit --amend -m "Update AstraDocumentStore initialization to use the correct parameter names."
 
 # بعد كده اعمل force push للفرع في fork
-git push -f origin feature-xyz
+git push -f origin fix-issues-in-Couchbase-documentation
 
