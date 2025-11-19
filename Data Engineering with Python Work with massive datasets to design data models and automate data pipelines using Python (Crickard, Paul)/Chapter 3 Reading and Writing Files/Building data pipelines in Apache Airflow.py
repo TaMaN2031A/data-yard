@@ -13,12 +13,12 @@ default_args = {
     'owner': 'airflow',
     'start_date': dt.datetime(2025, 11, 17),
     'retries': 1,
-    'retry_delay': dt.timedelta(minutes=5)
+    'retry_delay': dt.timedelta(seconds=30)
 }
 with DAG(
     'MyCSVDag',
     default_args=default_args,
-    schedule=dt.timedelta(minutes=5),
+    schedule=dt.timedelta(days=1000),
 ) as dag:
     print_starting = BashOperator(
         task_id='starting',
@@ -30,3 +30,4 @@ with DAG(
     )
     print_starting >> csvtojson_task
 
+# airflow dags reserialize
