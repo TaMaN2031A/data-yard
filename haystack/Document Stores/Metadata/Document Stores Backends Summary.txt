@@ -46,3 +46,15 @@ fault tolerant
 querying => N1QL (SQLike) + full-text search + vector search
 Designed for performance, caching built-in
 Operational database + Analytics engine + Vector DB في system واحد
+
+Elasticsearch
+Distributed search Engine
+Full text search (the best)
+very fast and scalable
+Easy aggregations
+Index like in the DB
+Documents as json
+Schema flexible
+Fuzzy search (للبحث عن الكلمات حتى لو فيها أخطاء إملائية.)
+Suggesters
+Vector search
