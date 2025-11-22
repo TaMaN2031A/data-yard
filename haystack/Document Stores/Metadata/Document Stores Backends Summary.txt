@@ -58,3 +58,17 @@ Schema flexible
 Fuzzy search (للبحث عن الكلمات حتى لو فيها أخطاء إملائية.)
 Suggesters
 Vector search
+
+LanceDB
+Quick
+Easy to use
+Uses Lance way of storing data (instead of parquet)
+Can work serverless
+
+
+marqo
+Vector Search Engine
+EndtoEnd
+Simple API
+Auto chunking and embedding pips
+
