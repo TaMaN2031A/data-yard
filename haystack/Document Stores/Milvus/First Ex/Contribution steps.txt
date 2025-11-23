@@ -1,0 +1,51 @@
+Git Feature Workflow مع Rebase – Cheat Sheet
+1️⃣ تحديث fork/main من الشركة
+git checkout main
+git remote add upstream <url_of_original_repo>
+https://github.com/deepset-ai/haystack-cookbook.git
+git fetch upstream
+git rebase upstream/main
+# حل أي conflicts:
+git add <file>
+git rebase --continue
+
+2️⃣ إنشاء فرع جديد للـ feature
+git checkout main
+git checkout -b feature-xyz
+
+
+تأكد دايمًا إن الفرع الجديد مبني على main المحدث.
+
+3️⃣ العمل على الـ feature
+# بعد تعديل الملفات
+git add .
+git commit -m "شرح التغيير هنا"
+
+4️⃣ إذا حصل تحديث في main أثناء العمل على feature
+git fetch upstream
+git rebase upstream/main
+# حل أي conflicts:
+git add <file>
+git rebase --continue
+
+# بعد الانتهاء، push للـ fork
+git push -f origin feature-xyz
+
+5️⃣ عمل Pull Request
+
+افتح GitHub، اعمل PR من feature-xyz في fork لـ main في الشركة.
+
+كل الكوميتات القديمة هتختفي، والـ PR هيحتوي بس على التعديلات الجديدة.
+
+
+
+لو عايز تغير اسم كوميت
+# اتأكد إنك على الفرع اللي فيه الـ commit
+git checkout feature-xyz
+
+# غير رسالة آخر commit
+git commit --amend -m "Update AstraDocumentStore initialization to use the correct parameter names."
+
+# بعد كده اعمل force push للفرع في fork
+git push -f origin fix-issues-in-Couchbase-documentation
+

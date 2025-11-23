@@ -22,4 +22,4 @@ indexing_pipeline.connect('converter', 'splitter')
 indexing_pipeline.connect('splitter', 'embedder')
 indexing_pipeline.connect('embedder', 'writer')
 
-indexing_pipeline.run({"converter": {"sources": ["../Metadata/Document Stores Backends Summary.txt"]}})
+indexing_pipeline.run({"converter": {"sources": ["../_Metadata/Document Stores Backends Summary.txt"]}})

@@ -72,3 +72,16 @@ EndtoEnd
 Simple API
 Auto chunking and embedding pips
 
+
+Milvus DB
+High-Performance Vector Database
+Scalable
+بتتعامل مع ملايين–مليارات الـ vectors بسهولة.
+Indexing Options
+بتدعم HNSW, IVF, DiskANN لتسريع البحث.
+Open-Source
+Cloud Option (Zilliz Cloud)
+نسخة مُدارة بالكامل، تقدر تبقى Serverless-like.
+Rich Querying
+تدعم hybrid search (vectors + metadata).
+Production-Ready
