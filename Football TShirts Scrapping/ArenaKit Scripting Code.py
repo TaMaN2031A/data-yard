@@ -1,4 +1,4 @@
-import gspread
+imporimport gspread
 from google.oauth2.service_account import Credentials
 from gspread_dataframe import set_with_dataframe
 import json
@@ -47,7 +47,6 @@ def scrapper(**kwargs):
     data = json.loads(clean_json)
     products = data["state"]["data"]["products"]
 
-    # استخراج المتغيرات لكل منتج
     rows = []
     for p in products:
         name = p.get("name", "")
@@ -75,7 +74,6 @@ def scrapper(**kwargs):
     df = pd.DataFrame(rows)
     df.sort_values(by=["waiting", "price"], ascending=[False, True], inplace=True)
 
-    # تخزين الـ DataFrame في XCom
     kwargs['ti'].xcom_push(key='market_data', value=df.to_json(orient="split"))
 
 
@@ -85,28 +83,35 @@ def writer(**kwargs):
     df_json = ti.xcom_pull(key='market_data', task_ids='scrapper_task')
     df = pd.read_json(df_json, orient="split")
 
+    # ✔ المسار الصحيح داخل WSL
+    SERVICE_ACCOUNT_PATH = "/home/eyad/airflow/dags/key.json"
+
     scopes = [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive",
     ]
-    creds = Credentials.from_service_account_file("key.json", scopes=scopes)
+    creds = Credentials.from_service_account_file(SERVICE_ACCOUNT_PATH, scopes=scopes)
     client = gspread.authorize(creds)
 
-    # فتح الـ spreadsheet
-    ss = client.open("Playground")
-
     # ---------------- Today Market State ----------------
-    today_sheet = ss.get_worksheet(0)
+    today_ss = client.open("Today Market State")
+    today_sheet = today_ss.get_worksheet(0)
     today_sheet.clear()
     set_with_dataframe(today_sheet, df)
 
     # ---------------- Market Day-to-Day State ----------------
+    archive_ss = client.open("Market Day-to-Day State")
     today_str = dt.datetime.now().strftime("%Y-%m-%d")
+
     try:
-        day_sheet = ss.worksheet(today_str)
+        day_sheet = archive_ss.worksheet(today_str)
         day_sheet.clear()
     except gspread.WorksheetNotFound:
-        day_sheet = ss.add_worksheet(title=today_str, rows=str(len(df)+10), cols=str(len(df.columns)+5))
+        day_sheet = archive_ss.add_worksheet(
+            title=today_str,
+            rows=str(len(df)+10),
+            cols=str(len(df.columns)+5)
+        )
 
     set_with_dataframe(day_sheet, df)
 
@@ -136,8 +141,8 @@ with DAG(
         python_callable=writer,
     )
 
-    # ترتيب التنفيذ
     scrapper_task >> writer_task
+
 
 # https://docs.google.com/spreadsheets/d/1rIYALNFJdNoeydbyQ6oI5vcaCemHZD0XWtcPdKEgAUQ/edit?usp=sharing
 # https://docs.google.com/spreadsheets/d/1Mcp3atUT_q2tYDt44J4Q0m5ItyBFoMsIR7rKDaU7kEw/edit?usp=sharing
