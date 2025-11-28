@@ -5,6 +5,7 @@ import json
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import datetime as dt
+import yagmail
 
 from airflow import DAG
 from airflow.providers.standard.operators.python import PythonOperator
@@ -83,7 +84,6 @@ def writer(**kwargs):
     df_json = ti.xcom_pull(key='market_data', task_ids='scrapper_task')
     df = pd.read_json(df_json, orient="split")
 
-    # ✔ المسار الصحيح داخل WSL
     SERVICE_ACCOUNT_PATH = "/home/eyad/airflow/dags/key.json"
 
     scopes = [
@@ -116,6 +116,34 @@ def writer(**kwargs):
     set_with_dataframe(day_sheet, df)
 
 
+# -------------------- EMAIL TASK --------------------
+def email_notifier(**kwargs):
+    with open("/home/eyad/airflow/dags/appkey.txt", "r") as f:
+        app_password = f.readline().strip()
+
+    sender_email = "tamanabdullah9@gmail.com"
+    receiver_email = "ramyalimahmoud@gmail.com"
+
+    today_str = dt.datetime.now().strftime("%Y-%m-%d (%A)")
+
+    message = f"""سلام عليكم ورحمة الله وبركاته
+صباحو يابو الريم
+هذا ايميل تلقائي
+تم إضافة بيانات اليوم لموقع أرينا
+اليوم: {today_str}
+"""
+
+    yag = yagmail.SMTP(sender_email, app_password)
+    yag.send(
+        to=receiver_email,
+        subject="تحديث بيانات أرينا — إرسال تلقائي",
+        contents=message
+    )
+
+    print("Email sent successfully!")
+
+
+
 # -------------------- AIRFLOW DAG --------------------
 default_args = {
     "owner": "airflow",
@@ -127,7 +155,7 @@ default_args = {
 with DAG(
     "OraMarketDag",
     default_args=default_args,
-    schedule=dt.timedelta(days=1),
+    schedule="@daily",
     catchup=False,
 ) as dag:
 
@@ -141,8 +169,9 @@ with DAG(
         python_callable=writer,
     )
 
-    scrapper_task >> writer_task
+    email_task = PythonOperator(
+        task_id="email_task",
+        python_callable=email_notifier,
+    )
 
-
-# https://docs.google.com/spreadsheets/d/1rIYALNFJdNoeydbyQ6oI5vcaCemHZD0XWtcPdKEgAUQ/edit?usp=sharing
-# https://docs.google.com/spreadsheets/d/1Mcp3atUT_q2tYDt44J4Q0m5ItyBFoMsIR7rKDaU7kEw/edit?usp=sharing
+    scrapper_task >> writer_task >> email_task

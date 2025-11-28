@@ -106,6 +106,32 @@ def writer(**kwargs):
 
     set_with_dataframe(day_sheet, df)
 
+# -------------------- EMAIL TASK --------------------
+def email_notifier(**kwargs):
+    with open("/home/eyad/airflow/dags/appkey.txt", "r") as f:
+        app_password = f.readline().strip()
+
+    sender_email = "tamanabdullah9@gmail.com"
+    receiver_email = "ramyalimahmoud@gmail.com"
+
+    today_str = dt.datetime.now().strftime("%Y-%m-%d (%A)")
+
+    message = f"""سلام عليكم ورحمة الله وبركاته
+صباحو يابو الريم
+هذا ايميل تلقائي
+تم إضافة بيانات اليوم لموقع كورفا
+اليوم: {today_str}
+"""
+
+    yag = yagmail.SMTP(sender_email, app_password)
+    yag.send(
+        to=receiver_email,
+        subject="تحديث بيانات كورفا — إرسال تلقائي",
+        contents=message
+    )
+
+    print("Email sent successfully!")
+
 
 # -------------------- AIRFLOW DAG --------------------
 default_args = {
@@ -118,7 +144,7 @@ default_args = {
 with DAG(
     "OraMarketDagCurva",
     default_args=default_args,
-    schedule=dt.timedelta(days=1),
+    schedule="@daily",
     catchup=False,
 ) as dag:
 
@@ -132,7 +158,10 @@ with DAG(
         python_callable=writer,
     )
 
-    scrapper_task >> writer_task
+    email_task = PythonOperator(
+        task_id="email_task",
+        python_callable=email_notifier,
+    )
 
-# https://docs.google.com/spreadsheets/d/1USsEmczh5G49qV8P8_WQcdOh93Y9eERfQORLF5YNZMU/edit?gid=0#gid=0
-# https://docs.google.com/spreadsheets/d/1USsEmczh5G49qV8P8_WQcdOh93Y9eERfQORLF5YNZMU/edit?gid=0#gid=0
+    scrapper_task >> writer_task >> email_task
+
