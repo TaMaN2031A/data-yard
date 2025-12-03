@@ -5,6 +5,7 @@ import json
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import datetime as dt
+from datetime import timedelta
 import yagmail
 
 from airflow import DAG
@@ -148,8 +149,9 @@ def email_notifier(**kwargs):
 default_args = {
     "owner": "airflow",
     "start_date": dt.datetime(2025, 11, 23),
-    "retries": 12,
-    "retry_delay": dt.timedelta(hours=1),
+    "retries": 1,
+    "retry_delay": dt.timedelta(minutes=1),
+    'execution_timeout': timedelta(minutes=1),
 }
 
 with DAG(

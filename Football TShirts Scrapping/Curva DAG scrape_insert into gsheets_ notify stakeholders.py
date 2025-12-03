@@ -2,10 +2,12 @@ import gspread
 from google.oauth2.service_account import Credentials
 from gspread_dataframe import set_with_dataframe
 import datetime as dt
+from datetime import timedelta
 
 from airflow import DAG
 from airflow.providers.standard.operators.python import PythonOperator
 from selenium.webdriver.chrome.options import Options
+import yagmail
 
 
 # -------------------- SCRAPER FUNCTION --------------------
@@ -137,8 +139,9 @@ def email_notifier(**kwargs):
 default_args = {
     "owner": "airflow",
     "start_date": dt.datetime(2025, 11, 23),
-    "retries": 12,
-    "retry_delay": dt.timedelta(hours=1),
+    "retries": 1,
+    "retry_delay": dt.timedelta(minutes=1),
+    'execution_timeout': timedelta(minutes=1),
 }
 
 with DAG(
