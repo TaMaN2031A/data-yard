@@ -85,3 +85,15 @@ Cloud Option (Zilliz Cloud)
 Rich Querying
 تدعم hybrid search (vectors + metadata).
 Production-Ready
+
+* OpenSearch
+هو محرك بحث وتحليل بيانات مفتوح المصدر.
+هو fork من Elasticsearch بعد تغيير رخصة الأخير.
+يمكنه تخزين مستندات JSON بسهولة.
+يدعم البحث النصي الكامل والمتقدم.
+يمكنه إجراء تحليلات وaggregations في الوقت الفعلي.
+يستخدم عادة لتحليل البيانات، السجلات، والـdashboards.
+يمكن تشغيله على عدة nodes ويعمل clustering لتوسيع السعة.
+APIs الخاصة به مشابهة لـElasticsearch، مما يسهل التحويل.
+يمكن استخدامه كـdocument store أو محرك بحث أو نظام تحليلي.
+مجاني ومفتوح المصدر، مع دعم تجاري عبر AWS OpenSearch Service.
