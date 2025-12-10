@@ -1,4 +1,4 @@
-name: Daily Arenakit Scraper
+name: Daily Market Scraper
 
 on:
   schedule:
@@ -20,11 +20,24 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install gspread google-auth gspread-dataframe beautifulsoup4 yagmail pandas
+        sudo apt-get update
+        sudo apt-get install -y chromium-driver  # ضروري للـ Curva
+        pip install gspread google-auth gspread-dataframe beautifulsoup4 yagmail pandas selenium
 
-    - name: Run Pipeline
+    - name: Run Arenakit Pipeline
       env:
         EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
         GOOGLE_KEY_JSON: ${{ secrets.GOOGLE_KEY_JSON }}
       run: |
+        echo "=== Starting Arenakit Pipeline ==="
         python "Football TShirts Scrapping/arena.py"
+        echo "=== Arenakit Pipeline Finished ==="
+
+    - name: Run Curva Pipeline
+      env:
+        EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
+        GOOGLE_KEY_JSON: ${{ secrets.GOOGLE_KEY_JSON }}
+      run: |
+        echo "=== Starting Curva Pipeline ==="
+        python "Football TShirts Scrapping/curva.py"
+        echo "=== Curva Pipeline Finished ==="
