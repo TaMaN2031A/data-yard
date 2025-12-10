@@ -2,7 +2,7 @@ name: Daily Market Scraper
 
 on:
   schedule:
-    - cron: "0 7 * * *"
+    - cron: "0 7 * * *"   # كل يوم الساعة 7 صباحًا
   workflow_dispatch:
 
 jobs:
@@ -22,8 +22,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y wget unzip xvfb libxi6 fonts-liberation libappindicator3-1 libatk-bridge2.0-0 libgtk-3-0 libnss3 libxss1 lsb-release
-        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/google-linux-signing-key.gpg
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-signing-key.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
         sudo apt-get update
         sudo DEBIAN_FRONTEND=noninteractive apt-get install -y google-chrome-stable || true
         CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
@@ -32,8 +32,8 @@ jobs:
         unzip ~/chromedriver_linux64.zip -d ~/
         sudo mv -f ~/chromedriver /usr/local/bin/chromedriver
         sudo chmod +x /usr/local/bin/chromedriver
+        pip install --upgrade pip
         pip install gspread google-auth gspread-dataframe yagmail pandas selenium beautifulsoup4
-
 
     - name: Run Arenakit Pipeline
       env:
