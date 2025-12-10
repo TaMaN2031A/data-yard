@@ -19,20 +19,21 @@ jobs:
         python-version: '3.10'
 
     - name: Install Chrome, ChromeDriver, and dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y wget unzip xvfb libxi6 fonts-liberation libappindicator3-1 libatk-bridge2.0-0 libgtk-3-0 libnss3 libxss1 lsb-release
-        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-        sudo apt-get update
-        sudo apt-get install -y google-chrome-stable || true
-        CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-        CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-        wget -N "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" -P ~/
-        unzip ~/chromedriver_linux64.zip -d ~/
-        sudo mv -f ~/chromedriver /usr/local/bin/chromedriver
-        sudo chmod +x /usr/local/bin/chromedriver
-        pip install gspread google-auth gspread-dataframe yagmail pandas selenium beautifulsoup4
+    run: |
+      sudo apt-get update
+      sudo apt-get install -y wget unzip xvfb libxi6 fonts-liberation libappindicator3-1 libatk-bridge2.0-0 libgtk-3-0 libnss3 libxss1 lsb-release
+      wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+      sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+      sudo apt-get update
+      sudo DEBIAN_FRONTEND=noninteractive apt-get install -y google-chrome-stable || true
+      CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
+      CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
+      wget -N "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" -P ~/
+      unzip ~/chromedriver_linux64.zip -d ~/
+      sudo mv -f ~/chromedriver /usr/local/bin/chromedriver
+      sudo chmod +x /usr/local/bin/chromedriver
+      pip install gspread google-auth gspread-dataframe yagmail pandas selenium beautifulsoup4
+
 
     - name: Run Arenakit Pipeline
       env:
