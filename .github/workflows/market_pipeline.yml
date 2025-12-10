@@ -25,7 +25,7 @@ jobs:
         wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
         sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
         sudo apt-get update
-        sudo apt-get install -y google-chrome-stable
+        sudo apt-get install -y google-chrome-stable || true
         CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
         CHROMEDRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
         wget -N "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" -P ~/
