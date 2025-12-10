@@ -23,11 +23,6 @@ jobs:
         pip install --upgrade pip
         pip install gspread google-auth gspread-dataframe yagmail pandas selenium beautifulsoup4 webdriver-manager
 
-    - name: Set up Chrome
-      uses: actions/setup-chromium@v1
-      with:
-        chromium-version: latest
-
     - name: Run Arenakit Pipeline
       env:
         EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
