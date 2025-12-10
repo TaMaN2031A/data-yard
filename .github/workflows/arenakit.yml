@@ -1,0 +1,30 @@
+name: Daily Arenakit Scraper
+
+on:
+  schedule:
+    - cron: "0 7 * * *"   # كل يوم الساعة 7 صباحًا
+  workflow_dispatch:       # لتشغيل يدوي
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install gspread google-auth gspread-dataframe beautifulsoup4 yagmail pandas
+
+    - name: Run Pipeline
+      env:
+        EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
+        GOOGLE_KEY_JSON: ${{ secrets.GOOGLE_KEY_JSON }}
+      run: |
+        python "Football TShirts Scrapping/arena.py"
