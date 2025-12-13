@@ -29,7 +29,7 @@ jobs:
         GOOGLE_KEY_JSON: ${{ secrets.GOOGLE_KEY_JSON }}
       run: |
         echo "=== Starting Arenakit Pipeline ==="
-        python "Football TShirts Scrapping/arena.py"
+        python "football tshirts scrapping/arena.py"
         echo "=== Arenakit Pipeline Finished ==="
 
     - name: Run Curva Pipeline
@@ -38,5 +38,5 @@ jobs:
         GOOGLE_KEY_JSON: ${{ secrets.GOOGLE_KEY_JSON }}
       run: |
         echo "=== Starting Curva Pipeline ==="
-        python "Football TShirts Scrapping/curva.py"
+        python "football tshirts scrapping/curva.py"
         echo "=== Curva Pipeline Finished ==="
