@@ -4,11 +4,11 @@ from haystack.components.embedders import SentenceTransformersTextEmbedder, Sent
 from haystack.components.retrievers import InMemoryEmbeddingRetriever, InMemoryBM25Retriever
 from haystack.components.joiners import DocumentJoiner
 from haystack.components.builders import ChatPromptBuilder
-from haystack.components.generators.chat import HuggingFaceAPIChatGenerator
 from haystack.dataclasses import ChatMessage
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.utils import Secret
 from haystack.utils.hf import HFGenerationAPIType
+from haystack.components.generators.chat import HuggingFaceAPIChatGenerator
 
 documents = [
     Document(content='Khufu is the largest Pyramid.'),
