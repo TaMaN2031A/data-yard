@@ -1,8 +1,9 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from gspread_dataframe import set_with_dataframe
-from selenium.webdriver.chrome.options import Options
+from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -12,19 +13,9 @@ import datetime as dt
 import os
 import time
 
+
 # -------------------- SCRAPER --------------------
-import time
-import pandas as pd
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-
 def scrapper():
-    global name
     URL = "https://curvaegypt.com/about/top-products"
     chrome_options = Options()
     chrome_options.add_argument("--headless")
@@ -36,8 +27,6 @@ def scrapper():
     driver.get(URL)
 
     for page_num in range(1, MAX_PAGES_TO_SCRAPE + 1):
-        driver.refresh()
-        time.sleep(3)
         # الانتظار حتى تظهر المنتجات في الـ DOM
         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CLASS_NAME, "grid"))
@@ -51,7 +40,7 @@ def scrapper():
         soup = BeautifulSoup(driver.page_source, 'html.parser')
 
         # البحث عن حاوية المنتجات
-        products_containers = soup.find_all('div', class_='relative bg-gray-light rounded-lg overflow-hidden')
+        products_containers = soup.select('div.relative.bg-gray-light.rounded-lg.overflow-hidden')
 
         print(f"Scraping page {page_num} | products found: {len(products_containers)}")
 
@@ -60,17 +49,13 @@ def scrapper():
             name_tag = item.find('p', class_='line-clamp-2')
             name = name_tag.get_text(strip=True) if name_tag else "N/A"
 
-            # استخراج الأسعار
-            price_container = item.find('div', class_='flex gap-4')
-
             # السعر الحالي (المخصم أو الأساسي)
-            current_price_tag = price_container.find('span',
-                                                     class_='text-[--primary-color]') if price_container else None
+            current_price_tag = item.select_one('span.text-primary.tabular-nums')
             current_price = current_price_tag.get_text(strip=True).replace('EGP', '') if current_price_tag else "0"
 
             # السعر الأصلي (قبل الخصم) إن وجد
-            old_price_tag = item.find('div', class_='relative text-xl font-bold')
-            old_price = old_price_tag.find('span').get_text(strip=True) if old_price_tag else None
+            old_price_tag = item.find('del')
+            old_price = old_price_tag.get_text(strip=True).replace('EGP', '') if old_price_tag else None
 
             all_products_data.append({
                 "name": name,
@@ -87,7 +72,7 @@ def scrapper():
                 )
 
                 # حفظ اسم أول منتج للتأكد من تغير الصفحة
-                first_product_name = name
+                first_product_name = driver.find_element(By.CLASS_NAME, "line-clamp-2").text
 
                 driver.execute_script("arguments[0].click();", next_btn)
 
@@ -102,6 +87,7 @@ def scrapper():
 
     driver.quit()
     return pd.DataFrame(all_products_data)
+
 
 # -------------------- WRITER --------------------
 def writer(df):
@@ -129,6 +115,7 @@ def writer(df):
         )
     set_with_dataframe(day_sheet, df)
 
+
 # -------------------- EMAIL --------------------
 def email_notifier():
     app_password = os.environ.get("EMAIL_APP_PASSWORD")
@@ -151,12 +138,16 @@ def email_notifier():
     )
     print("Email sent successfully!")
 
+
 # -------------------- RUN PIPELINE --------------------
 def run_pipeline():
     df = scrapper()
+    if df.empty:
+        raise RuntimeError("Scraper returned 0 products - selectors probably changed")
     writer(df)
     email_notifier()
     print("Pipeline finished successfully!")
+
 
 if __name__ == "__main__":
     run_pipeline()
